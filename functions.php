@@ -12,7 +12,7 @@ function sanitize($data) {
  function print_error(){
         
     if(isset($_SESSION['error']) &&  !empty($_SESSION['error'])){
-        echo $_SESSION["error"];
+        echo "<p class='success'>" . $_SESSION["error"] . "</p>";
         unset($_SESSION["error"]);
     }
 }
@@ -21,7 +21,7 @@ function sanitize($data) {
 function print_success(){
 
     if(isset($_SESSION['success']) &&  !empty($_SESSION['success'])){
-        echo $_SESSION["success"];
+        echo "<p class='error'>" . $_SESSION["success"] . "</p>";
         unset($_SESSION["success"]);
     }
 }

@@ -34,6 +34,14 @@ span.red{
     color: red;
     font-size: 10px;
 }
+.success{
+    background-color: #27ae60;
+    color: #fff;
+}
+.error{
+    background-color: red;
+    color: #fff;
+}
 
 section:nth-child(even){
     background:#eee;

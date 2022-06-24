@@ -1,0 +1,17 @@
+{
+    "name": "user/hephzibah_foods",
+    "autoload": {
+        "psr-4": {
+            "User\\HephzibahFoods\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "elijahwale",
+            "email": "walexy730@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.6"
+    }
+}

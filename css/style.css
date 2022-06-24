@@ -30,10 +30,7 @@ html{
 section{
     padding:2rem 8%;
 }
-span.red{
-    color: red;
-    font-size: 10px;
-}
+
 .success{
     background-color: #27ae60;
     color: #fff;
@@ -477,13 +474,17 @@ color: #fff ;
 .order form .inputBox .input{
     width: 49%;
 }
-.order form .inputBox .input span{
+.order form .inputBox .input label{
     display: block;
     padding: .5rem 0;
     font-size: 1.5rem;
     color: var(--light-color);
 }
-
+span.red {
+    color: red;
+    font-size: 10px;
+    display: block;
+}
 .order form .inputBox .input input,
 .order form .inputBox .input textarea{
     background: #eee;
@@ -505,7 +506,7 @@ color: #fff ;
     resize: none;
 }
 .order form .btn{
-    margin-top: 0;
+    margin-top: 10px;
 }
 .footer .box-container{
     display: grid;

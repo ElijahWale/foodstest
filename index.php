@@ -1,65 +1,111 @@
 <?php
 session_start();
+//Import PHPMailer classes into the global namespace
+//These must be at the top of your script, not inside a function
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
 
 include_once "functions.php";
 
-$errors = [];
+$errors = ['name' => '', 'Number' => '', 'Order' => '', 'additional_food' => '', 'no_of_orders' => '', 'date' => '', 'address' => '', 'message' => ''];
 if(isset($_POST['submit'])){
-    
-    $name = sanitize($_POST['name']);
-    $Number = sanitize($_POST['number']);
-    $Order = sanitize($_POST['order']);
-    $additional_food = sanitize($_POST['additional_food']) ;
-    $no_of_orders = sanitize($_POST['no_of_orders']);
-    $date = sanitize($_POST['date']);
-    $address = sanitize($_POST['address']);
-    $message = sanitize($_POST['message']);
+    if(empty($_POST['name'])){
+        $errors['name'] = 'Name field is empty';
+    }else{
+        $name = sanitize($_POST['name']);
+    }
+    if(empty($_POST['number'])){
+        $errors['Number'] = 'Number is empty';
+    }else{
+         $Number = sanitize($_POST['number']);
+    }
+    if(empty($_POST['order'])){
+        $errors['Order'] = 'order field is empty';
+    }else{
+         $Order = sanitize($_POST['order']);
+    }
+    if(empty($_POST['additional_food'])){
+        $errors['additional_food'] = 'additional food field is empty';
+    }else{
+        $additional_food = sanitize($_POST['additional_food']);
+    }
+    if(empty($_POST['no_of_orders'])){
+        $errors['no_of_orders'] = 'number of order feeds is empty';
+    }else{
+        $no_of_orders = sanitize($_POST['no_of_orders']);
+    }
+    if(empty($_POST['date'])){
+        $errors['date'] = 'date field is empty';
+    }else{
+        $date = sanitize($_POST['date']);
+    }
+    if(empty($_POST['address'])){
+        $errors['address'] = 'Address field is empty';
+    }else{
+        $address = sanitize($_POST['address']);
+    }
+    if(empty($_POST['message'])){
+        $errors['message'] = 'message field is empty';
+    }else{
+        $message = sanitize($_POST['message']);
+    }
 
+    if(!array_filter($errors)){
+        //Create an instance; passing `true` enables exceptions
+        $body = "<p> Phone Number: $Number <br>Order: $Order <br>Additional Foods: $additional_food <br>no_of_orders: $no_of_orders <br> date and Time: $date <br>Address: $address <br>message: $message <br></p>";
+        
+$mail = new PHPMailer(true);
 
-    if(empty($name)){
-        $errors['name'] = "Name field is empty";
-    }
-    if(empty($Number)){
-        $errors['Number'] = "Number is empty";
-    }
-    if(empty($Order)){
-        $errors['Order'] = "order field is empty";
-    }
-    if(empty($additional_food)){
-        $errors['additional_food'] = "additional food field is empty";
-    }
-    if(empty($no_of_orders)){
-        $errors['no_of_orders'] = "number of order feede is empty";
-    }
-    if(empty($date)){
-        $errors['date'] = "date field is empty";
-    }
-    if(empty($address)){
-        $errors['address'] = "Address field is empty";
-    }
-    if(empty($message)){
-        $errors['message'] = "message field is empty";
-    }
+try {
+    //Server settings
+    $mail->SMTPDebug = 2;                      //Enable verbose debug output
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Username   = 'elijahwalecodes@gmail.com';                     //SMTP username
+    $mail->Password   = 'senater12_';                               //SMTP password
+    $mail->SMTPSecure = 'TLS';            //Enable implicit TLS encryption
+    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
-    if(!empty($errors)){
+    //Recipients
+    $mail->setFrom('hephzibahfoods@example.com', '$name');
+    $mail->addAddress('elijahwalecodes@gmail.com', 'Olawale Esan');     //Add a recipient
+               //Name is optional
+    $mail->addReplyTo('walexy730@gmail.com', 'Information');
 
-        $to = "walexy730@gmail.com";
-        $subject = "Order for Hephzibah Foods";
-        $message = "Name of Customer: $name <br>";
-        $message .= "Phone Number: $Number <br>";
-        $message .= "Order: $Order <br>";
-        $message .= "Additional Foods: $additional_food <br>";
-        $message .= "no_of_orders: $no_of_orders <br>";
-        $message .= "date and Time: $date <br>";
-        $message .= "Address: $address <br>";
-        $message .= "message: $message <br>";
+    //Content
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'Order from Hephzibah Page';
+    $mail->Body    = $body;
+    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-        $email_sent = mail($to, $subject, $message);
-        if($email_sent == true){
-            $_SESSION['success'] = "message sent successfully";
-        }else{
-            $_SESSION['error'] = "message could not be sent";
-        }
+    $mail->send();
+    $_SESSION['success'] = 'Message has been sent';
+} catch (Exception $e) {
+    $_SESSION['error'] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+}
+        // $to = "walexy730@gmail.com";
+        // $subject = "Order for Hephzibah Foods";
+        // $message = "Name of Customer: $name <br>";
+        // $message .= "Phone Number: $Number <br>";
+        // $message .= "Order: $Order <br>";
+        // $message .= "Additional Foods: $additional_food <br>";
+        // $message .= "no_of_orders: $no_of_orders <br>";
+        // $message .= "date and Time: $date <br>";
+        // $message .= "Address: $address <br>";
+        // $message .= "message: $message <br>";
+
+        // $email_sent = mail($to, $subject, $message);
+        // if($email_sent == true){
+        //     $_SESSION['success'] = "message sent successfully";
+        // }else{
+        //     $_SESSION['error'] = "message could not be sent";
+        // }
     }
     
 }
@@ -561,47 +607,47 @@ if(isset($_POST['submit'])){
         <form action="" method="POST">
             <div class="inputBox">
                 <div class="input">
-                    <span>your name</span>
-                    <input type="text" name="name" placeholder="enter your name">
-                    <span class="red"><?= empty($errors) ? "" : $errors['name'] ?></span>
+                    <label for="name">your name</label>
+                    <input type="text" name="name" placeholder="enter your name" value="<?php if(isset($_POST['name'])) echo $_POST['name']; ?>">
+                    <span class="red"><?= $errors['name'] ?></span>
                 </div>
                 <div class="input">
-                    <span>your number</span>
-                    <input type="number" name="number" placeholder="enter your number">
-                    <span class="red"><?= empty($errors) ? "" : $errors['Number'] ?></span>
+                    <label for="number">your number</label>
+                    <input type="number" name="number" placeholder="enter your number" value="<?php if(isset($_POST['number'])) echo $_POST['number']; ?>">
+                    <span class="red"><?= $errors['Number'] ?></span>
                     
                 </div>
                 <div class="input">
-                    <span>your order</span>
-                    <input type="text" name="order" placeholder="enter food name">
-                    <span class="red"><?= empty($errors) ? "" : $errors['Order'] ?></span>
+                    <label for="order">your order</label>
+                    <input type="text" name="order" placeholder="enter food name" value="<?php if(isset($_POST['order'])) echo $_POST['order']; ?>"">
+                    <span class="red"><?= $errors['Order'] ?></span>
                 </div>
                 <div class="input">
-                    <span>Additional Food</span>
-                    <input type="text" name="additional_food" placeholder="extra with food">
-                    <span class="red"><?= empty($errors) ? "" : $errors['additional_food'] ?></span>
+                    <label for="additional">Additional Food</label>
+                    <input type="text" name="additional_food" placeholder="extra with food" value="<?php if(isset($_POST['additional_food'])) echo $_POST['additional_food']; ?>">
+                    <span class="red"><?= $errors['additional_food'] ?></span>
                 </div>
                 <div class="input">
-                    <span>how much</span>
-                    <input type="text" name="no_of_orders" placeholder="how many orders">
-                    <span class="red"><?= empty($errors) ? "" : $errors['no_of_orders'] ?></span>
+                    <label for="quantity">how much</label>
+                    <input type="text" name="no_of_orders" placeholder="how many orders" value="<?php if(isset($_POST['no_of_orders'])) echo $_POST['no_of_orders']; ?>">
+                    <span class="red"><?= $errors['no_of_orders'] ?></span>
                 </div>
                 <div class="input">
-                    <span>date and time</span>
-                    <input type="datetime-local" name="date">
-                    <span class="red"><?= empty($errors) ? "" :  $errors['date'] ?></span>
+                    <label for="date">date and time</label>
+                    <input type="datetime-local" name="date" value="<?php if(isset($_POST['date'])) echo $_POST['date']; ?>">
+                    <span class="red"><?=  $errors['date'] ?></span>
                 </div>
             </div>
             <div class="inputBox">
                 <div class="input">
-                    <span>your address</span>
-                    <textarea name="address" placeholder="enter your address" id="" cols="30" rows="10"></textarea>
-                    <span class="red"><?= empty($errors) ? "" :  $errors['address'] ?></span>
+                    <label for="address">your address</label>
+                    <textarea name="address" placeholder="enter your address" id="" cols="30" rows="10"><?php if(isset($_POST['address'])) echo $_POST['address']; ?></textarea>
+                    <span class="red"><?=  $errors['address'] ?></span>
                 </div>
                 <div class="input">
-                    <span>your message</span>
-                    <textarea name="message" placeholder="enter your message" id="" cols="30" rows="10"></textarea>
-                    <span class="red"><?= empty($errors) ? "" : $errors['message'] ?></span>
+                    <label for="message">your message</label>
+                    <textarea name="message" placeholder="enter your message" id="" cols="30" rows="10"><?php if(isset($_POST['message'])) echo $_POST['message']; ?></textarea>
+                    <span class="red"><?= $errors['message'] ?></span>
                 </div>
             </div>
                 <input type="submit" name="submit" value="order now" class="btn">
@@ -649,9 +695,9 @@ if(isset($_POST['submit'])){
     </section>
 
     <!-- loading part -->
-    <div class="loader-container">
+    <!-- <div class="loader-container">
         <img src="assets/loader.gif" alt="">
-    </div>
+    </div> -->
 
 
 

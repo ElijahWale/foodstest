@@ -2,9 +2,9 @@
 session_start();
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+// use PHPMailer\PHPMailer\PHPMailer;
+// use PHPMailer\PHPMailer\SMTP;
+// use PHPMailer\PHPMailer\Exception;
 
 //Load Composer's autoloader
 require 'vendor/autoload.php';
@@ -57,55 +57,62 @@ if(isset($_POST['submit'])){
 
     if(!array_filter($errors)){
         //Create an instance; passing `true` enables exceptions
-        $body = "<p> Phone Number: $Number <br>Order: $Order <br>Additional Foods: $additional_food <br>no_of_orders: $no_of_orders <br> date and Time: $date <br>Address: $address <br>message: $message <br></p>";
+//         $body = "<p> Phone Number: $Number <br>Order: $Order <br>Additional Foods: $additional_food <br>no_of_orders: $no_of_orders <br> date and Time: $date <br>Address: $address <br>message: $message <br></p>";
         
-$mail = new PHPMailer(true);
+// $mail = new PHPMailer(true);
 
-try {
-    //Server settings
-    $mail->SMTPDebug = 2;                      //Enable verbose debug output
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'elijahwalecodes@gmail.com';                     //SMTP username
-    $mail->Password   = 'senater12_';                               //SMTP password
-    $mail->SMTPSecure = 'TLS';            //Enable implicit TLS encryption
-    $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+// try {
+//     //Server settings
+//     $mail->SMTPDebug = 2;                      //Enable verbose debug output
+//     $mail->isSMTP();                                            //Send using SMTP
+//     $mail->Host      = 'smtp.mailgun.org';                     //Set the Yahoo SMTP server to send through
+//     $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+//     $mail->Username   = 'olawaleesan@ymail.com';                     //SMTP username
+//     $mail->Password   = 'senater123';                           //SMTP password
+//     $mail->SMTPSecure = 'ssl';            //Enable implicit TLS encryption
+//     $mail->SMTPOptions = array(
+//         'ssl' => array(
+//         'verify_peer' => false,
+//         'verify_peer_name' => false,
+//         'allow_self_signed' => true
+//         )
+//         );
+//     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
     //Recipients
-    $mail->setFrom('hephzibahfoods@example.com', '$name');
-    $mail->addAddress('elijahwalecodes@gmail.com', 'Olawale Esan');     //Add a recipient
-               //Name is optional
-    $mail->addReplyTo('walexy730@gmail.com', 'Information');
+//     $mail->setFrom('olawaleesan@ymail.com', '$name');
+//     $mail->addAddress('elijahwalecodes@gmail.com', 'Olawale Esan');     //Add a recipient
+//                //Name is optional
+//     $mail->addReplyTo('walexy730@gmail.com', 'Information');
 
-    //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Order from Hephzibah Page';
-    $mail->Body    = $body;
-    $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+//     //Content
+//     $mail->isHTML(true);                                  //Set email format to HTML
+//     $mail->Subject = 'Order from Hephzibah Page';
+//     $mail->Body    = "$body";
+//     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-    $mail->send();
-    $_SESSION['success'] = 'Message has been sent';
-} catch (Exception $e) {
-    $_SESSION['error'] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-}
-        // $to = "walexy730@gmail.com";
-        // $subject = "Order for Hephzibah Foods";
-        // $message = "Name of Customer: $name <br>";
-        // $message .= "Phone Number: $Number <br>";
-        // $message .= "Order: $Order <br>";
-        // $message .= "Additional Foods: $additional_food <br>";
-        // $message .= "no_of_orders: $no_of_orders <br>";
-        // $message .= "date and Time: $date <br>";
-        // $message .= "Address: $address <br>";
-        // $message .= "message: $message <br>";
+//     $mail->send();
+//     $_SESSION['success'] = 'Message has been sent';
+// } catch (Exception $e) {
+//     $_SESSION['error'] = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+// }
+        $to = "walexy730@gmail.com";
+        $subject = "Order for Hephzibah Foods";
+        $message = "Name of Customer: $name <br>";
+        $message .= "Phone Number: $Number <br>";
+        $message .= "Order: $Order <br>";
+        $message .= "Additional Foods: $additional_food <br>";
+        $message .= "no_of_orders: $no_of_orders <br>";
+        $message .= "date and Time: $date <br>";
+        $message .= "Address: $address <br>";
+        $message .= "message: $message <br>";
 
-        // $email_sent = mail($to, $subject, $message);
-        // if($email_sent == true){
-        //     $_SESSION['success'] = "message sent successfully";
-        // }else{
-        //     $_SESSION['error'] = "message could not be sent";
-        // }
+        $email_sent = mail($to, $subject, $message);
+        if($email_sent == true){
+            $_SESSION['success'] = "message sent successfully";
+        }else{
+            $_SESSION['error'] = "message could not be sent";
+        }
     }
     
 }

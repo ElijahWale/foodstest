@@ -98,16 +98,29 @@ if(isset($_POST['submit'])){
 // }
         $to = "walexy730@gmail.com";
         $subject = "Order for Hephzibah Foods";
-        $message = "Name of Customer:" . $name . "<br>";
-        $message .= "Phone Number:" . $Number . "<br>";
-        $message .= "Order:" . $Order . "<br>";
-        $message .= "Additional Foods:" . $additional_food . "<br>";
-        $message .= "no_of_orders:" . $no_of_orders . "<br>";
-        $message .= "date and Time:" . $date . "<br>";
-        $message .= "Address:" . $address . "<br>";
-        $message .= "message:" . $body . "<br>";
+        $message = "
+        <html>
+        <head>
+        <title>Order Hephzibah FOods</title>
+        </head>
+        <body>
+        <h1>Name of Customer: $name</h1>
+        <p>Phone Number: $Number</p>
+        <p>$Number</p>
+        <p>$Number</p>
+        <p>Order: $Order</p>
+        <p>Additional Foods: $additional_food</p>
+        <p>no_of_orders: $no_of_orders</p>
+        <p>date and Time: $date</p>
+        <p>Address: $address</p>
+        <p>message: $body</p>
+        </body>
+        </html>
+        ";
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
-        $email_sent = mail($to, $subject, $message);
+        $email_sent = mail($to, $subject, $message, $headers);
         if($email_sent == true){
             $_SESSION['success'] = "message sent successfully";
         }else{

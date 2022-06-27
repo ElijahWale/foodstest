@@ -52,7 +52,7 @@ if(isset($_POST['submit'])){
     if(empty($_POST['message'])){
         $errors['message'] = 'message field is empty';
     }else{
-        $message = sanitize($_POST['message']);
+        $body = sanitize($_POST['message']);
     }
 
     if(!array_filter($errors)){
@@ -98,14 +98,14 @@ if(isset($_POST['submit'])){
 // }
         $to = "walexy730@gmail.com";
         $subject = "Order for Hephzibah Foods";
-        $message = "Name of Customer: $name <br>";
-        $message .= "Phone Number: $Number <br>";
-        $message .= "Order: $Order <br>";
-        $message .= "Additional Foods: $additional_food <br>";
-        $message .= "no_of_orders: $no_of_orders <br>";
-        $message .= "date and Time: $date <br>";
-        $message .= "Address: $address <br>";
-        $message .= "message: $message <br>";
+        $message = "Name of Customer:" . $name . "<br>";
+        $message .= "Phone Number:" . $Number . "<br>";
+        $message .= "Order:" . $Order . "<br>";
+        $message .= "Additional Foods:" . $additional_food . "<br>";
+        $message .= "no_of_orders:" . $no_of_orders . "<br>";
+        $message .= "date and Time:" . $date . "<br>";
+        $message .= "Address:" . $address . "<br>";
+        $message .= "message:" . $body . "<br>";
 
         $email_sent = mail($to, $subject, $message);
         if($email_sent == true){
